@@ -1,0 +1,6 @@
+SELECT DISTINCT
+    CITY
+FROM
+    STATION
+WHERE
+    CITY REGEXP '^[a,e,i,o,u]' AND SUBSTRING(CITY, -1) REGEXP '[a,e,i,o,u]';
