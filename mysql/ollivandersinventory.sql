@@ -11,3 +11,6 @@ WHERE
     p.is_evil = 0
 ORDER BY
     w1.power DESC, p.age DESC
+
+-- Query learned from this discussion
+-- https://stackoverflow.com/questions/7745609/sql-select-only-rows-with-max-value-on-a-column
