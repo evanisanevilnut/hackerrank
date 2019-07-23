@@ -1,0 +1,64 @@
+// Complete the kangaroo function below.
+    static boolean kangarooHelper(int fasterKangarooPosition, int fasterKangarooVelocity, int slowerKangarooPosition, int slowerKangarooVelocity) {
+        int fasterKangarooCurrentPosition = fasterKangarooPosition;
+        int slowerKangarooCurrentPosition = slowerKangarooPosition;
+        while (fasterKangarooCurrentPosition < slowerKangarooCurrentPosition) {
+            fasterKangarooCurrentPosition += fasterKangarooVelocity;
+            slowerKangarooCurrentPosition += slowerKangarooVelocity;
+            if (fasterKangarooCurrentPosition == slowerKangarooCurrentPosition) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    static String kangaroo(int kangaroo1StartingPosition, int kangaroo1JumpDistance, int kangaroo2StartingPosition, int kangaroo2JumpDistance) {
+
+        // 3 cases: jump distances =, <, >
+        // edge case : = both jump same distance
+
+
+        // if their jump distance is the same, they'll never be in the same place unless they started in the same place
+        if (kangaroo1JumpDistance == kangaroo2JumpDistance) {
+            if (kangaroo1StartingPosition == kangaroo2StartingPosition) {
+                return "YES";
+            } else {
+                return "NO";
+            }
+        }
+
+        // remaining two cases
+        // eliminate cases where it's not possible right away
+        boolean isKangaroo1Faster;
+        if (kangaroo1JumpDistance > kangaroo2JumpDistance) {
+            isKangaroo1Faster = true;
+        } else {
+            isKangaroo1Faster = false;
+        }
+
+        boolean isKangaroo1StartingFurther;
+        if (kangaroo1StartingPosition > kangaroo2StartingPosition) {
+            isKangaroo1StartingFurther = true;
+        } else {
+            isKangaroo1StartingFurther = false;
+        }
+
+        String result = "Error";
+        if ((isKangaroo1Faster && !isKangaroo1StartingFurther) || (!isKangaroo1Faster && isKangaroo1StartingFurther)) {
+            result = "NO";
+        }
+
+        if (isKangaroo1Faster & !isKangaroo1StartingFurther) {
+            if (kangarooHelper(kangaroo1StartingPosition, kangaroo1JumpDistance, kangaroo2StartingPosition, kangaroo2JumpDistance)) {
+                result = "YES";
+            }
+        } else if (!isKangaroo1Faster & isKangaroo1StartingFurther) {
+            if (kangarooHelper(kangaroo2StartingPosition, kangaroo2JumpDistance, kangaroo1StartingPosition, kangaroo1JumpDistance)) {
+                result = "YES";
+            }
+        } else {
+            result = "NO";
+        }
+        return result;
+    }
