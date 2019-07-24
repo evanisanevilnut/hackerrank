@@ -9,57 +9,49 @@ import java.util.Scanner;
 
 public class Solution {
 
-    /*
-     * Complete the 'pickingNumbers' function below.
-     *
-     * The function is expected to return an INTEGER.
-     * The function accepts INTEGER_ARRAY a as parameter.
-     */
+    // Complete the climbingLeaderboard function below.
+    static int[] climbingLeaderboard(int[] scores, int[] alice) {
 
-    public static int pickingNumbers(List<Integer> a) {
-        int[] inputIntArray = new int[a.size()];
-        for (int i = 0; i < inputIntArray.length; i++) {
-            inputIntArray[i] = a.get(i);
+        int[] resultAlicesRankings = new int[alice.length];
+
+        int[] positionsOfScores = new int[scores.length];
+        positionsOfScores[0] = 1;
+
+        int currentPosition = 1;
+        int currentScoreIndex = 1;
+        while (currentScoreIndex <= scores.length - 1) {
+
+            // If the scores are the same, the next score will be the same position as the current one
+            if (scores[currentScoreIndex] < scores[currentScoreIndex - 1]) {
+                currentPosition++;
+            }
+            positionsOfScores[currentScoreIndex] = currentPosition;
+            currentScoreIndex++;
+            // otherwise the next score is lower, since scores is in descending order, so increment position
         }
+        currentScoreIndex--;
 
+        // Since Alice's scores are ascending and scores in leaderboard are descending,
+        //      We'll go through Alice's rankings starting from the end of the scores array
+        for (int i = 0; i < alice.length; i++) {
+            int aliceCurrentScore = alice[i];
 
-        int resultLargestListSize = 0;
-        Set<Integer> uniqueIntsChecked = new HashSet<>();
-
-//        List<Integer> currentBiggestList = new ArrayList<>();
-
-        for (int currentElement : a ) {
-            if (!uniqueIntsChecked.contains(currentElement)) {
-                int countOfCurrentElement = 0;
-                int countOfElementsOneGreater = 0;
-                int countOfElementsOfLesser = 0;
-
-                for (int crossCheckingElement: inputIntArray) {
-                    if (currentElement == crossCheckingElement) {
-                        countOfCurrentElement++;
-                    } else if (crossCheckingElement - currentElement == 1) {
-                        countOfElementsOneGreater++;
-                    } else if (currentElement - crossCheckingElement == 1) {
-                        countOfElementsOfLesser++;
-                    }
+            // This is a pre-emptive termination argument for the while loop
+            if (aliceCurrentScore >= scores[0]) {
+                resultAlicesRankings[i] = 1;
+            } else {
+                //      since alice's scores are ascending, once she reaches first place there's no need to go through scores anymore
+                while (aliceCurrentScore > scores[currentScoreIndex]) {
+                    currentScoreIndex--;
                 }
-
-                int listSizeOfElementAndOneGreater = (countOfCurrentElement + countOfElementsOneGreater);
-                int listSizeOfElementAndOneLesser = (countOfCurrentElement + countOfElementsOfLesser);
-
-                int biggestListSizeOfCurrentElement = 0;
-                if (listSizeOfElementAndOneGreater >= listSizeOfElementAndOneLesser) {
-                    biggestListSizeOfCurrentElement = listSizeOfElementAndOneGreater;
+                if (aliceCurrentScore == scores[currentScoreIndex]) {
+                    resultAlicesRankings[i] = positionsOfScores[currentScoreIndex];
                 } else {
-                    biggestListSizeOfCurrentElement = listSizeOfElementAndOneLesser;
-                }
-
-                if (biggestListSizeOfCurrentElement > resultLargestListSize) {
-                    resultLargestListSize = biggestListSizeOfCurrentElement;
+                    resultAlicesRankings[i] = positionsOfScores[currentScoreIndex] + 1;
                 }
             }
         }
-        return resultLargestListSize;
+        return resultAlicesRankings;
     }
 
 
@@ -67,17 +59,23 @@ public class Solution {
 
         Scanner reader = new Scanner(new InputStreamReader(System.in));
 
-        String sizeOfInputListAsStringArray = reader.nextLine();
-        int sizeOfInputArray = Integer.parseInt(sizeOfInputListAsStringArray);
-        String[] InputArray = reader.nextLine().split(" ");
-        List<Integer> inputList = new ArrayList<>();
-        for (int i = 0; i < sizeOfInputArray; i++ ) {
-            int tempInt = Integer.parseInt(InputArray[i]);
-            inputList.add(tempInt);
+        String numberOfLeaderBoardScores = reader.nextLine();
+        String[] leaderBoardScoresAsStringArray = reader.nextLine().split(" ");
+        int[] leaderBoardScores = new int[leaderBoardScoresAsStringArray.length];
+        for (int i = 0; i < leaderBoardScores.length; i++) {
+            leaderBoardScores[i] = Integer.parseInt(leaderBoardScoresAsStringArray[i]);
         }
 
-        int result = pickingNumbers(inputList);
+        String numberOfAliceScores = reader.nextLine();
+        String[] aliceScoresAsStringArray = reader.nextLine().split(" ");
+        int[] aliceScores = new int[aliceScoresAsStringArray.length];
+        for (int i = 0; i < aliceScores.length; i++) {
+            aliceScores[i] = Integer.parseInt(aliceScoresAsStringArray[i]);
+        }
 
-        System.out.println(result);
+
+        int[] resultOfAliceRanking = climbingLeaderboard(leaderBoardScores, aliceScores);
+
+        System.out.println(resultOfAliceRanking);
     }
 }
