@@ -8,12 +8,6 @@ import java.util.regex.*;
 
 public class Solution {
 
-    static void hasThis(char passwordChar, String typeOfString, boolean typeBoolean) {
-        if (typeOfString.contains(""+passwordChar)) {
-            typeBoolean = true;
-        }
-    }
-
     // Complete the minimumNumber function below.
     static int minimumNumber(int n, String password) {
         int minNumCharsNeeded = 0;
